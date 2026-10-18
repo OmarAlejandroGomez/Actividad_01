@@ -51,10 +51,12 @@ class Administrativo(Persona):
     def mostrar_informacion(self):
         return (
             f"{super().mostrar_informacion()} "
+            f"Número de Empleado: {self.get_numero_empleado()}, "
             f"Dependencia: {self.get_dependencia()}, "
             f"Cargo: {self.get_cargo()}, Jornada: {self.get_jornada()}"
         )
     
-    
+    def realizar_actividad_principal(self):
+        return f"El administrativo {self.get_nombre()} está realizando su actividad principal en la dependencia de {self.get_dependencia()} con el cargo de {self.get_cargo()} y jornada {self.get_jornada()}."
     
     

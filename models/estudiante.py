@@ -9,7 +9,7 @@ class Estudiante(Persona):
     def __init__(self, identificacion, nombre, correo, promedio_acumulado, programa_academico, semestre):
         super().__init__(identificacion, nombre, correo)
         Estudiante.contador_estudiantes += 1
-        self.codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes + 1:04d}"
+        self.codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes:03d}"
         self.promedio_acumulado = promedio_acumulado
         self.programa_academico = programa_academico
         self.semestre = semestre
