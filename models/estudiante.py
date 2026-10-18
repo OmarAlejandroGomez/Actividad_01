@@ -48,3 +48,9 @@ class Estudiante(Persona):
             self.semestre = semestre
         else:
             raise ValueError("El semestre debe ser un número entero entre 1 y 10")
+
+    def mostrar_informacion(self):
+        return f"{super().mostrar_informacion()} - Código Estudiantil: {self.get_codigo_estudiantil()}, - Promedio Acumulado: {self.get_promedio_acumulado()}, - Programa Académico: {self.get_programa_academico()}, - Semestre: {self.get_semestre()}"
+
+    def realizar_actividad_principal(self):
+        return f"El estudiante {self.get_nombre()} está realizando su actividad principal de estudio en el programa académico de {self.get_programa_academico()} en el semestre {self.get_semestre()} con un promedio acumulado de {self.get_promedio_acumulado()}."
