@@ -9,11 +9,11 @@ class Estudiante(Persona):
     
     def __init__(self, identificacion, nombre, correo, promedio_acumulado, programa_academico, semestre):
         super().__init__(identificacion, nombre, correo)
-        self.programa_academico = programa_academico
-        self.semestre = semestre
-        self.promedio_acumulado = promedio_acumulado
+        self.set_programa_academico (programa_academico)
+        self.set_semestre (semestre)
+        self.set_promedio_acumulado (promedio_acumulado)
         Estudiante.contador_estudiantes += 1
-        self.codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes:03d}"
+        self._codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes:03d}"
                
     # el código estudiantil es de consulta, por lo que no se solicita al usuario    
     def get_codigo_estudiantil(self):
@@ -36,10 +36,10 @@ class Estudiante(Persona):
         return self._programa_academico
 
     def set_programa_academico(self, programa_academico):
-    if isinstance(programa_academico, ProgramaAcademico):
-        self._programa_academico = programa_academico
-    else:
-            raise ValueError("El programa académico no puede estar vacío")
+        if isinstance(programa_academico, ProgramaAcademico):
+            self._programa_academico = programa_academico
+        else:
+            raise ValueError("El programa académico debe existir")
 
     def get_semestre(self):
         return self._semestre
@@ -51,7 +51,8 @@ class Estudiante(Persona):
             raise ValueError("El semestre debe ser un número entero entre 1 y 10")
 
     def mostrar_informacion(self):
-        return f"{super().mostrar_informacion()} - Código Estudiantil: {self.get_codigo_estudiantil()}, - Promedio Acumulado: {self.get_promedio_acumulado()}, - Programa Académico: {self.get_programa_academico()}, - Semestre: {self.get_semestre()}"
+        return f"{super().mostrar_informacion()} - Código Estudiantil: {self.get_codigo_estudiantil()}, - Promedio Acumulado: {self.get_promedio_acumulado()}, - Programa Académico: {self.get_programa_academico() .get_nombre()}, - Semestre: {self.get_semestre()}"
 
     def realizar_actividad_principal(self):
-        return f"El estudiante {self.get_nombre()} está realizando su actividad principal de estudio en el programa académico de {self.get_programa_academico()} en el semestre {self.get_semestre()} con un promedio acumulado de {self.get_promedio_acumulado()}."
+        return f"El estudiante {self.get_nombre()} está realizando su actividad principal de estudio en el programa académico de {self.get_programa_academico() .get_nombre()} en el semestre {self.get_semestre()} con un promedio acumulado de {self.get_promedio_acumulado()}"
+    
