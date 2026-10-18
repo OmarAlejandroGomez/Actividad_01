@@ -1,4 +1,5 @@
 from models.persona import Persona
+from models.programa_academico import ProgramaAcademico
 
 class Estudiante(Persona):
 
@@ -8,44 +9,44 @@ class Estudiante(Persona):
     
     def __init__(self, identificacion, nombre, correo, promedio_acumulado, programa_academico, semestre):
         super().__init__(identificacion, nombre, correo)
-        Estudiante.contador_estudiantes += 1
-        self.codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes:03d}"
-        self.promedio_acumulado = promedio_acumulado
         self.programa_academico = programa_academico
         self.semestre = semestre
-
+        self.promedio_acumulado = promedio_acumulado
+        Estudiante.contador_estudiantes += 1
+        self.codigo_estudiantil = f"EST-{Estudiante.contador_estudiantes:03d}"
+               
     # el código estudiantil es de consulta, por lo que no se solicita al usuario    
     def get_codigo_estudiantil(self):
-        return self.codigo_estudiantil
+        return self._codigo_estudiantil
 
     def get_promedio_acumulado(self):
-        return self.promedio_acumulado
+        return self._promedio_acumulado
 
     #revisar que el promedio acumulado sea un número entre 0 y 5, de lo contrario se lanza una excepción
 
     def set_promedio_acumulado(self, promedio_acumulado):
         if isinstance(promedio_acumulado, (int, float)) and 0 <= promedio_acumulado <= 5:
-            self.promedio_acumulado = promedio_acumulado
+            self._promedio_acumulado = promedio_acumulado
         else:
             raise ValueError("El promedio acumulado debe estar entre 0 y 5")
 
     # revisar que el programa académico no esté vacío
 
     def get_programa_academico(self):
-        return self.programa_academico
+        return self._programa_academico
 
     def set_programa_academico(self, programa_academico):
-        if programa_academico.strip() != "":
-            self.programa_academico = programa_academico
-        else:
+    if isinstance(programa_academico, ProgramaAcademico):
+        self._programa_academico = programa_academico
+    else:
             raise ValueError("El programa académico no puede estar vacío")
 
     def get_semestre(self):
-        return self.semestre
+        return self._semestre
 
     def set_semestre(self, semestre):
         if isinstance(semestre, int) and semestre > 0 and semestre <= 10:
-            self.semestre = semestre
+            self._semestre = semestre
         else:
             raise ValueError("El semestre debe ser un número entero entre 1 y 10")
 
