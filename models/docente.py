@@ -2,6 +2,8 @@ from models.persona import Persona
 
 class Docente(Persona):
 
+    contador = 0
+
     def __init__(self, identificacion, nombre, correo, facultad, tipo_contratacion, horas_semanales):
         super().__init__(identificacion, nombre, correo)
         self.set_facultad(facultad)
@@ -10,7 +12,7 @@ class Docente(Persona):
         
         #dejar el número de empleado para no ser solicitado en la creación del docente, sino que se asignará automáticamente
         Docente.contador += 1
-        self._numero_empleado = f"Docente-{Docente.contador:04d}"
+        self._numero_empleado = f"Docente-{Docente.contador:03d}"
 
     # Número de empleado
     def get_numero_empleado(self):
@@ -51,7 +53,7 @@ class Docente(Persona):
     
     # Mostrar información, los datos de personas y los datos de docente            
     def mostrar_informacion(self):
-        return f"{super().mostrar_informacion()} - Facultad: {self.get_facultad()}, Tipo de Contratación: {self.get_tipo_contratacion()}, Horas Semanales: {self.get_horas_semanales()}"
+        return f"{super().mostrar_informacion()} - Número de Empleado: {self.get_numero_empleado()}, - Facultad: {self.get_facultad()}, Tipo de Contratación: {self.get_tipo_contratacion()}, Horas Semanales: {self.get_horas_semanales()}"
 
     # Actividad del docente
 
