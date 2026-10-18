@@ -27,17 +27,33 @@ class Docente(Persona):
         else: 
             raise ValueError("La facultad no puede ser vacía")
 
+    # Tipo de contratación
 
-    # Título
-    def get_titulo(self):
-        return self._titulo
+    def get_tipo_contratacion(self):
+        return self._tipo_contratacion
 
-    def set_titulo(self, titulo):
-        if(titulo.strip() != ""):
-            self._titulo = titulo
+    def set_tipo_contratacion(self, tipo_contratacion):
+        if(tipo_contratacion.strip() != ""):
+            self._tipo_contratacion = tipo_contratacion.strip()
         else: 
-            raise ValueError("El título no puede ser vacío")
+            raise ValueError("El tipo de contratación no puede ser vacía")
+
+    # Horas semanales
+    def get_horas_semanales(self):
+        return self._horas_semanales
+
+    def set_horas_semanales(self, horas_semanales):
+        if(horas_semanales > 0):
+            self._horas_semanales = horas_semanales
+        else: 
+            raise ValueError("Las horas semanales deben ser mayores a cero")
+
     
-    # Mostrar información            
+    # Mostrar información, los datos de personas y los datos de docente            
     def mostrar_informacion(self):
-        return f"{super().mostrar_informacion()} - Título: {self.get_titulo()}"
+        return f"{super().mostrar_informacion()} - Facultad: {self.get_facultad()}, Tipo de Contratación: {self.get_tipo_contratacion()}, Horas Semanales: {self.get_horas_semanales()}"
+
+    # Actividad del docente
+
+    def realizar_actividad_principal(self):
+        return f"El docente {self.get_nombre()} está realizando su actividad principal de docencia en la facultad de {self.get_facultad()} con un contrato de {self.get_tipo_contratacion()} y trabajando {self.get_horas_semanales()} horas semanales."
