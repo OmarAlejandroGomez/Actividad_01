@@ -12,13 +12,31 @@ Atendiendo las instrucciones de la actividad, se generó un sistema que organiza
 
 El sistema funciona por medio de una consola que contiene un menú. También se incluye una opción de demostración.
 
+# Estructura archivos
+
+Actividad_01/
+├── main.py                                         # Archivo principal: menú y demostración
+├── README.md
+├── diagrama_clases_SistemaGestionAcademica.drawio  # Diagrama de clases UML (draw.io)
+├── models/
+│   ├── persona.py                # Clase base Persona
+│   ├── estudiante.py             # Estudiante (hereda de Persona)
+│   ├── docente.py                # Docente (hereda de Persona)
+│   ├── administrativo.py         # Administrativo (hereda de Persona)
+│   ├── programa_academico.py     # ProgramaAcademico
+│   └── asignatura.py             # Asignatura (pertenece a un ProgramaAcademico)
+└── controllers/
+    ├── persona_controller.py     # Colección única de personas (registro y búsqueda)
+    ├── programa_controller.py    # Registro de programas académicos
+    └── asignatura_controller.py  # Registro de asignaturas
+
 # Principios utilizados: 
 
 Clases, atributos, métodos, herencia, sobrescritura y polimorfismo.
 
 Clases: persona (estudiante, docente, administrativo), programa académico, asignatura.
 
-Atributos: Para persona son , en el caso de los hijos, para estudiante son código estudiantil, programa académico, semestre, promedio acumulado; para docente son número de empleado, facultad, tipo de contratación, horas semanales; para administrativo son número de empleado, dependencia, cargo, jornada
+Atributos: Para persona son identificación, nombre y correo, en el caso de los hijos, para estudiante son código estudiantil, programa académico, semestre, promedio acumulado; para docente son número de empleado, facultad, tipo de contratación, horas semanales; para administrativo son número de empleado, dependencia, cargo, jornada
 
 Para asignatura son código, nombre, número de créditos, programa académico.
 
