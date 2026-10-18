@@ -1,16 +1,18 @@
 # Actividad_01
 # Universidad de Manizales - Asignatura: Programación
 
-Integrantes:
+# Integrantes:
 Omar Alejandro Gómez Rocha
 Juan Carlos Girón Sanabria
 Cristhian Mauricio Hernández Gaviria
 
-Descripción: 
+# Descripción: 
 
 Atendiendo las instrucciones de la actividad, se generó un sistema que organiza información básica de la comunidad académica de una universidad: programas académicos, asignaturas y personas (estudiantes, docentes y personal admininistrativo).
 
-Principios utilizados: 
+El sistema funciona por medio de una consola que contiene un menú. También se incluye una opción de demostración.
+
+# Principios utilizados: 
 
 Clases, atributos, métodos, herencia, sobrescritura y polimorfismo.
 
@@ -18,40 +20,55 @@ Clases: persona (estudiante, docente, administrativo), programa académico, asig
 
 Atributos: Para persona son , en el caso de los hijos, para estudiante son código estudiantil, programa académico, semestre, promedio acumulado; para docente son número de empleado, facultad, tipo de contratación, horas semanales; para administrativo son número de empleado, dependencia, cargo, jornada
 
-Para asignatura son 
+Para asignatura son código, nombre, número de créditos, programa académico.
 
-Para programa académico son 
+Para programa académico son código, nombre, facultad, número de semestres.
 
 
 Métodos: mostrar_información() y realizar_actividad_principal()
 
-Herencia: Estudiante, docente y administrativo son hijos de persona.
+Herencia: Persona es la clase padre. Contiene los atributos comunes a toda persona vinculada (identificación, nombre y correo), sus métodos get_ y set_, y los métodos mostrar_informacion() y realizar_actividad_principal().
 
-Sobrescritura: A pesar de que estudiante, docente y administrativo son hijos, con super se le asignan atributos propios. 
+Estudiante, Docente y Administrativo son hijos: heredan de Persona y en su constructor llaman a super().__init__(identificacion, nombre, correo). Así reutilizan la inicialización y las validaciones comunes sin repetirlas.
+
+Sobrescritura: Las tres clases hijas de persona utilizan super().mostrar_informacion() para llamar los datos generales de persona y les agrega datos particulares. 
 
 Polimorfismo: En main.py todas las personas se guardan en una única colección y se recorren con un
-solo ciclo:
-
-for persona in personas.get_personas():
-print(persona.mostrar_informacion())
-print(persona.realizar_actividad_principal())
+solo ciclo.
 
  # Instrucciones de ejecución
 
- Requisitos: Vs Code, Python 3.10 o superior. No requiere librerías externas.
+ Requisitos: Vs Code, Python. No requiere librerías externas.
 
     git clone https://github.com/OmarAlejandroGomez/Actividad_01.git
-    
-    Actividad_01
+    cd Actividad_01
     python main.py
 
-    El programa ejecuta automáticamente, en orden, las siete pruebas mínimas:
+    Al ejecutar el programa, se muestra el siguiente menú: 
 
-    1.Creación de programas académicos y asignaturas.
-    2.Creación de seis personas (dos estudiantes, dos docentes y dos administrativos).
+    1. Agregar programa académico
+    2. Agregar asignatura
+    3. Agregar estudiante
+    4. Agregar docente
+    5. Agregar administrativo
+    6. Mostrar programas
+    7. Mostrar asignaturas
+    8. Mostrar personas
+    9. Modificar correo de una persona
+    10. Modificar semestres de un programa
+    11. Modificar créditos de una asignatura
+    12. Ejecutar demostración
+    13. Salir
+
+    Demostración: 
+
+    La opción 12 permite validar lo siguiente: 
+
+    1.Creación de dos programas académicos y dos asignaturas.
+    2.Creación de seis personas: dos estudiantes, dos docentes y dos administrativos.
     3.Consulta de la información de los objetos.
-    4.Modificación válida de datos encapsulados.
-    5.Intento de asignar valores inválidos (el sistema los rechaza e informa el motivo).
+    4.Modificación válida de datos encapsulados (correo de un estudiante y créditos de una asignatura).
+    5.Intento de asignar valores inválidos
     6.Presentación particular de cada tipo de persona.
     7.Recorrido polimórfico de la colección de personas.
 
