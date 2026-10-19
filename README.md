@@ -58,7 +58,16 @@ Estudiante, Docente y Administrativo son hijos: heredan de Persona y en su const
 
 Sobrescritura: Las tres clases hijas de persona utilizan super().mostrar_informacion() para llamar los datos generales de persona y les agrega datos particulares. 
 
-Polimorfismo: En main.py todas las personas se guardan en una única colección y se recorren con un solo ciclo.
+Polimorfismo: En **main.py** todas las personas se guardan en una única colección y se recorren con un solo ciclo.
+
+# Archivo **main.py**  
+Este archivo es el que se ejecuta para usar el sistema. 
+
+Muestra un menú en la terminal que se repite hasta que el usuario decide salir. 
+
+Desde el menú se pueden registrar programas, asignaturas, estudiantes, docentes y administrativos, y también consultar y modificar sus datos. Si un dato no es válido, el programa explica el motivo y lo pide de nuevo. 
+
+Además, recorre a todas las personas con un solo ciclo y muestra la información y la actividad de cada una, según su tipo.
 
  # Instrucciones de ejecución
 
@@ -99,9 +108,10 @@ Polimorfismo: En main.py todas las personas se guardan en una única colección 
   # Uso IA
 
 Las herramientas de IA se utilizaron en el siguiente proyecto para: 
-    - la revisión del modelo 
-    - la escritura del código (especialmente copilot integrado a VsCode en su función predictiva) 
-    - la identificación de errores en el código 
+
+   - la revisión del modelo 
+   - la escritura del código (especialmente copilot integrado a VsCode en su función predictiva) 
+   - la identificación de errores en el código 
 
 
 
