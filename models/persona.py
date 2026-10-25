@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod     #se llama el módulo Abstract Base Classes ABC para definir la clase como abstracta
+
 class Persona(ABC):                     #se incluye dentro del parentesis la clase ABC para definir la clase como abstracta
     @abstractmethod
     def __init__(self, identificacion, nombre, correo):
