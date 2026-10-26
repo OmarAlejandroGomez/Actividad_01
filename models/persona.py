@@ -37,3 +37,10 @@ class Persona(ABC):                     #se incluye dentro del parentesis la cla
     # Mostrar información            
     def mostrar_informacion(self):
         return f"Identificación: {self.get_identificacion()} - Nombre: {self.get_nombre()} - Email: {self.get_correo()}"
+    
+    # Se genera el método abstracto realizar_actividad_principal, que será implementado por las 
+    # clases hijas (Estudiante, Docente y Administrativo) para definir la actividad principal
+    @abstractmethod
+    def realizar_actividad_principal(self):
+        pass
+    

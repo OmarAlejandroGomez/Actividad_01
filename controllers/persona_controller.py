@@ -15,8 +15,9 @@ class PersonaController:
         self.personas.append(persona)
         return persona
 
-    def add_personas(self, identificacion, nombre, correo):
-        return self._agregar_persona(Persona(identificacion, nombre, correo))
+    # Se comentó el método add_personas ya que no se puede instanciar la clase abstracta Persona directamente
+    #def add_personas(self, identificacion, nombre, correo):
+    #    return self._agregar_persona(Persona(identificacion, nombre, correo))
 
     def add_estudiante(self, identificacion, nombre, correo, programa_academico, semestre, promedio_acumulado):
         estudiante = Estudiante(identificacion, nombre, correo, promedio_acumulado, programa_academico, semestre)
