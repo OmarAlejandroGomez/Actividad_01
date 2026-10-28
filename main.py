@@ -1,7 +1,8 @@
 from controllers.persona_controller import PersonaController
 from controllers.programa_controller import ProgramaController
 from controllers.asignatura_controller import AsignaturaController
-
+from models.estudiante import Estudiante
+from models.persona import Persona
 
 ## Para pedir datos al usuario
 
@@ -113,6 +114,65 @@ def agregar_administrativo(persona_controller):
             return
         except ValueError as error:
             print(f"{error}. Intenta nuevamente.\n")
+
+## Incluir en grupo
+
+def elegir_con_descripcion(elementos, descripciones, mensaje_vacio):
+
+    """Muestra una lista numerada (programas o asignaturas) y devuelve el elemento elegido."""
+    if len(elementos) == 0:
+        print(mensaje_vacio)
+        return None
+
+    posicion = 1
+    for descripcion in descripciones:
+        print(f"{posicion}. {descripcion}")
+        posicion += 1
+
+    while True:
+        opcion = int(input("Elige el número de la lista: "))
+        if opcion >= 1 and opcion <= len(elementos):
+            return elementos[opcion - 1]
+        print("Opción fuera de la lista")
+
+def elegir_docente(persona_controller):
+    docentes = persona_controller.get_docentes()
+    descripciones = [f"{docente.get_numero_empleado()} - {docente.get_nombre()}" for docente in docentes]
+    return elegir_con_descripcion(docentes, descripciones, "Primero debe registrar un docente")
+
+def elegir_grupo(grupo_controller):
+    grupos = grupo_controller.get_grupos()
+    descripciones = [grupo.mostrar_informacion_grupo() for grupo in grupos]
+    return elegir_con_descripcion(grupos, descripciones, "Primero debe registrar un grupo académico")            
+
+def agregar_grupo(grupo_controller, asignatura_controller, persona_controller):
+    codigo_asignatura = input("Ingresa el código de la asignatura: ")
+    
+    asignatura = asignatura_controller.buscar_asignatura(codigo_asignatura)
+    if asignatura is None:
+        print("No existe una asignatura con ese código")
+        return
+
+    docente = elegir_docente(persona_controller)
+    if docente is None:
+        return
+
+    while True:
+        codigo = input("Ingresa el código del grupo: ")
+        capacidad_maxima = int(input("Ingresa la capacidad máxima del grupo: "))
+        dia = input("Ingresa el día de la semana (Lunes, Martes, Miércoles, Jueves, Viernes): ")
+        hora_inicio = input("Ingresa la hora de inicio (HH:MM): ")
+        hora_fin = input("Ingresa la hora de fin (HH:MM): ")
+        salon = input("Ingresa el salón: ")
+
+        try:
+            grupo_controller.add_grupo(codigo, asignatura, docente, capacidad_maxima, dia, hora_inicio, hora_fin, salon)
+            print("Grupo agregado con éxito")
+            return
+        except ValueError as error:
+            print(f"{error}. Intenta nuevamente.\n")
+
+#def retirar_de_grupo(grupo_controller):
 
 
 ## Funciones para mostrar
