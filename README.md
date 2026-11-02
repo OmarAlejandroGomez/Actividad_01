@@ -122,7 +122,7 @@ Atendiendo las instrucciones de la actividad 2, se actualizó el sistema generad
 ```
 python main.py
 ```
-El menú que se despliega conserva la opción **12** para ejecutar una demostración automática que recorre todas las fases. Las nuevas opciones, **13 a 19**, permiten probar los grupos, la matrícula y las búsquedas de forma manual.
+El menú que se despliega conserva la opción **18** para ejecutar una demostración automática que recorre todas las fases. Las nuevas opciones, **12 a 17**, permiten probar los grupos, la matrícula y las búsquedas de forma manual.
 
 ## Estructura archivos
 
@@ -139,7 +139,7 @@ Actividad_01/
         ├── programa_academico.py     # ProgramaAcademico
         └── asignatura.py             # Asignatura (pertenece a un ProgramaAcademico)
         └── horario.py                # Horario: Define el día, hora de inicio, hora de salida y salón
-        └── grupo_academico.py        # GrupoAcademico (hereda de Horario)
+        └── grupo_academico.py        # GrupoAcademico (contiene un Horario: composición)
         └── excepciones.py            # Cada clase hereda de excepciones y entrega mensaje de error
     └── controllers/
         ├── persona_controller.py     # Colección única de personas (registro y búsqueda)
@@ -153,7 +153,7 @@ Actividad_01/
 
 Para volver a `Persona` abstracta, se invoca el módulo Abstract Base Classes (ABC) para que herede de `ABC`; también se declara `realizar_actividad_principal()` con `@abstractmethod`. 
 Como `Persona` no puede saber cuál es la actividad de una persona "en general", cada hija (`Estudiante`, `Docente`, `Administrativo`) escribe la suya.
-Si alguien intenta ejecutar `Persona(...)`, Python lanza `TypeError`. Se eliminó el método `add_personas` del controlador
+Si alguien intenta ejecutar `Persona(...)`, Python lanza `TypeError`. Se comentó el método `add_personas` del controlador
 porque intentaba crear una `Persona` directamente.
 
 ## Fase 2. Organización de la oferta académica
@@ -164,22 +164,26 @@ porque intentaba crear una `Persona` directamente.
 
 Un grupo académico *tiene* un horario. El horario describe cuándo y dónde se dicta *ese* grupo. Por eso `GrupoAcademico` **crea** su propio `Horario` dentro de su constructor y lo guarda como atributo. Cuando el grupo desaparece, su horario desaparece con él. Lo anterior es la **composición**.
 
-Los objetos asignatura y el docente existen antes que el grupo y siguen existiendo sin él (el docente puede dictar otros grupos), por lo que el grupo solo los recibe (**agregación**).
+Los objetos asignatura y el docente existen antes que el grupo y siguen existiendo sin él (el docente puede dictar otros grupos), por lo que el grupo solo los recibe ya creados (**asociación**). Los estudiantes matriculados se guardan en la lista del grupo (**agregación**): retirarlos del grupo no los elimina del sistema.
 
 ¿Por qué no es herencia? La herencia expresa una relación "es un" (un `Estudiante` *es una* `Persona`). Un grupo académico **no es** un horario, no se pueden usar uno en lugar del otro. Si `GrupoAcademico` heredara de `Horario`, tendría que "ser" un horario, lo cual no tendría coherencia. Con composición, cada clase hace una sola cosa: `Horario` valida día, horas y salón y, `GrupoAcademico` administra la matrícula.
 
 ## Fase 4. Excepciones personalizadas
 
-Todas están en `models/excepciones.py` y heredan de `SistemaAcademicoError`.
+Todas están en `models/excepciones.py` y heredan de `Exception`.
 
 | Situación | Excepción | Se lanza desde |
 |---|---|---|
 | Estudiante ya matriculado | `EstudianteYaMatriculadoError` | `GrupoAcademico.matricular_estudiante` |
-| Grupo sin cupos | `GrupoLlenoError` | `GrupoAcademico.matricular_estudiante` |
+| Grupo sin cupos | `CapacidadMaximaError` | `GrupoAcademico.matricular_estudiante` |
 | Retirar a quien no está matriculado | `EstudianteNoMatriculadoError` | `GrupoAcademico.retirar_estudiante` |
 | Asignatura inexistente | `AsignaturaNoEncontradaError` | `AsignaturaController.buscar_asignatura` |
 | Programa inexistente | `ProgramaNoEncontradoError` | `ProgramaController.buscar_programa` |
 
 Cada una se **lanza** con `raise` donde se detecta el problema, se **captura** con `try/except` en `main.py`,
 muestra un mensaje comprensible y el programa continúa mostrando el menú.
+
+## Documento de Decisiones de Diseño
+
+Se encuentra en este repositorio: `Documento Decisiones de Diseño AC2.pdf`.
 
