@@ -99,7 +99,7 @@ class GrupoAcademico:
         if len(self._estudiantes) == 0:
             return "No hay estudiantes matriculados en el grupo."
         else:
-            for(estudiante in self._estudiantes):
+            for estudiante in self._estudiantes:
                 listado_estudiantes.append(
                     f"{estudiante.get_codigo_estudiantil()} - {estudiante.get_nombre()}"
                     f"({estudiante.get_programa_academico().get_nombre()}, semestre {estudiante.get_semestre()})"
