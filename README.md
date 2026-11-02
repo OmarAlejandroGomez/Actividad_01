@@ -1,4 +1,4 @@
-# Actividad_01
+
 # Universidad de Manizales - Asignatura: Programación I
 
 # Integrantes:
