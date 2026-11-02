@@ -36,6 +36,11 @@ class PersonaController:
             if persona.get_identificacion() == identificacion:
                 return persona
         return None
+    
+    # Devuelve solo los docentes, para elegir el responsable de un grupo
 
+    def get_docentes(self):
+        return [persona for persona in self.personas if isinstance(persona, Docente)]
+    
     def get_personas(self):
         return self.personas.copy()

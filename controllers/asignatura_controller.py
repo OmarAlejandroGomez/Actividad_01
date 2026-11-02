@@ -1,4 +1,5 @@
 from models.asignatura import Asignatura
+from models.excepciones import AsignaturaNoEncontradaError
 
 class AsignaturaController:
 
@@ -12,3 +13,11 @@ class AsignaturaController:
 
     def get_asignaturas(self):
         return self.asignaturas.copy()
+
+     # Busca una asignatura por su código; si no existe lanza la excepción AsignaturaNoEncontradaError
+    
+    def buscar_asignatura(self, codigo):
+        for asignatura in self.asignaturas:
+            if asignatura.get_codigo() == codigo.strip():
+                return asignatura
+        raise AsignaturaNoEncontradaError(codigo.strip())   
