@@ -9,7 +9,7 @@ Juan Carlos Girón Sanabria
 
 Cristhian Mauricio Hernández Gaviria
 
-# Construcción de un Sistema de Gestión Académica 
+# Actividad 1. Construcción de un Sistema de Gestión Académica
 
 Atendiendo las instrucciones de la actividad, se generó un sistema que organiza información básica de la comunidad académica de una universidad: programas académicos, asignaturas y personas (estudiantes, docentes y personal admininistrativo).
 
@@ -17,7 +17,7 @@ Inicialmente, a partir del análisis conjunto de las instrucciones de la activid
 
 Respecto del sistema, este funciona por medio de una consola que contiene un menú. También se incluye una opción de demostración.
 
-# Estructura archivos
+## Estructura archivos
 
 Actividad_01/
 
@@ -36,7 +36,7 @@ Actividad_01/
         ├── programa_controller.py    # Registro de programas académicos
         └── asignatura_controller.py  # Registro de asignaturas
 
-# Principios utilizados: 
+## Principios utilizados: 
 
 Clases, atributos, métodos, herencia, sobrescritura y polimorfismo.
 
@@ -60,7 +60,7 @@ Sobrescritura: Las tres clases hijas de persona utilizan super().mostrar_informa
 
 Polimorfismo: En **main.py** todas las personas se guardan en una única colección y se recorren con un solo ciclo.
 
-# Archivo **main.py**  
+## Archivo **main.py**  
 Este archivo es el que se ejecuta para usar el sistema. 
 
 Muestra un menú en la terminal que se repite hasta que el usuario decide salir. 
@@ -69,7 +69,7 @@ Desde el menú se pueden registrar programas, asignaturas, estudiantes, docentes
 
 Además, recorre a todas las personas con un solo ciclo y muestra la información y la actividad de cada una, según su tipo.
 
- # Instrucciones de ejecución
+ ## Instrucciones de ejecución
 
  Requisitos: Vs Code, Python. No requiere librerías externas.
 
@@ -105,7 +105,7 @@ Además, recorre a todas las personas con un solo ciclo y muestra la informació
     6.Presentación particular de cada tipo de persona.
     7.Recorrido polimórfico de la colección de personas.
 
-  # Uso IA
+  ## Uso IA
 
 Las herramientas de IA se utilizaron en el siguiente proyecto para: 
 
@@ -113,5 +113,73 @@ Las herramientas de IA se utilizaron en el siguiente proyecto para:
    - la escritura del código (especialmente copilot integrado a VsCode en su función predictiva) 
    - la identificación de errores en el código 
 
+# Actividad 2. Evolución del Sistema de Gestión Académica
 
+Atendiendo las instrucciones de la actividad 2, se actualizó el sistema generado en la actividad 1, incluyendo el registro de la oferta académica, organizando la información en **grupos** con su **horario**.
+
+## Cómo ejecutarlo
+
+```
+python main.py
+```
+El menú que se despliega conserva la opción **12** para ejecutar una demostración automática que recorre todas las fases. Las nuevas opciones, **13 a 19**, permiten probar los grupos, la matrícula y las búsquedas de forma manual.
+
+## Estructura archivos
+
+Actividad_01/
+
+    |── README.md
+    |── diagrama_clases_SistemaGestionAcademica.drawio  # Diagrama de clases UML (draw.io)
+    |── main.py                                         # Archivo principal: menú y demostración
+    ├── models/
+        ├── persona.py                # Clase abstracta
+        ├── estudiante.py             # Estudiante (hereda de Persona)
+        ├── docente.py                # Docente (hereda de Persona)
+        ├── administrativo.py         # Administrativo (hereda de Persona)
+        ├── programa_academico.py     # ProgramaAcademico
+        └── asignatura.py             # Asignatura (pertenece a un ProgramaAcademico)
+        └── horario.py                # Horario: Define el día, hora de inicio, hora de salida y salón
+        └── grupo_academico.py        # GrupoAcademico (hereda de Horario)
+        └── excepciones.py            # Cada clase hereda de excepciones y entrega mensaje de error
+    └── controllers/
+        ├── persona_controller.py     # Colección única de personas (registro y búsqueda)
+        ├── programa_controller.py    # Registro de programas académicos
+        ├── asignatura_controller.py  # Registro de asignaturas
+        └── grupo_controller.py       # Registro de grupos académicos
+
+## Requerimientos:
+
+## Fase 1. Generalización de las personas
+
+Para volver a `Persona` abstracta, se invoca el módulo Abstract Base Classes (ABC) para que herede de `ABC`; también se declara `realizar_actividad_principal()` con `@abstractmethod`. 
+Como `Persona` no puede saber cuál es la actividad de una persona "en general", cada hija (`Estudiante`, `Docente`, `Administrativo`) escribe la suya.
+Si alguien intenta ejecutar `Persona(...)`, Python lanza `TypeError`. Se eliminó el método `add_personas` del controlador
+porque intentaba crear una `Persona` directamente.
+
+## Fase 2. Organización de la oferta académica
+
+`GrupoAcademico` guarda: código, asignatura, docente, capacidad máxima, estudiantes matriculados y horario. Recibe **objetos** `Asignatura` y `Docente` ya creados (no textos sueltos) y ofrece `mostrar_informacion_grupo()`,`matricular_estudiante(estudiante)`, `retirar_estudiante(codigo_estudiantil)` y `mostrar_estudiantes()`.
+
+## Fase 3. Relación de composición
+
+Un grupo académico *tiene* un horario. El horario describe cuándo y dónde se dicta *ese* grupo. Por eso `GrupoAcademico` **crea** su propio `Horario` dentro de su constructor y lo guarda como atributo. Cuando el grupo desaparece, su horario desaparece con él. Lo anterior es la **composición**.
+
+Los objetos asignatura y el docente existen antes que el grupo y siguen existiendo sin él (el docente puede dictar otros grupos), por lo que el grupo solo los recibe (**agregación**).
+
+¿Por qué no es herencia? La herencia expresa una relación "es un" (un `Estudiante` *es una* `Persona`). Un grupo académico **no es** un horario, no se pueden usar uno en lugar del otro. Si `GrupoAcademico` heredara de `Horario`, tendría que "ser" un horario, lo cual no tendría coherencia. Con composición, cada clase hace una sola cosa: `Horario` valida día, horas y salón y, `GrupoAcademico` administra la matrícula.
+
+## Fase 4. Excepciones personalizadas
+
+Todas están en `models/excepciones.py` y heredan de `SistemaAcademicoError`.
+
+| Situación | Excepción | Se lanza desde |
+|---|---|---|
+| Estudiante ya matriculado | `EstudianteYaMatriculadoError` | `GrupoAcademico.matricular_estudiante` |
+| Grupo sin cupos | `GrupoLlenoError` | `GrupoAcademico.matricular_estudiante` |
+| Retirar a quien no está matriculado | `EstudianteNoMatriculadoError` | `GrupoAcademico.retirar_estudiante` |
+| Asignatura inexistente | `AsignaturaNoEncontradaError` | `AsignaturaController.buscar_asignatura` |
+| Programa inexistente | `ProgramaNoEncontradoError` | `ProgramaController.buscar_programa` |
+
+Cada una se **lanza** con `raise` donde se detecta el problema, se **captura** con `try/except` en `main.py`,
+muestra un mensaje comprensible y el programa continúa mostrando el menú.
 
