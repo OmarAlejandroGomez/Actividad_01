@@ -1,8 +1,11 @@
 from controllers.persona_controller import PersonaController
 from controllers.programa_controller import ProgramaController
 from controllers.asignatura_controller import AsignaturaController
+from controllers.grupo_controller import GrupoController
 from models.estudiante import Estudiante
 from models.persona import Persona
+from models.excepciones import (EstudianteYaMatriculadoError, CapacidadMaximaError, EstudianteNoMatriculadoError,
+                                AsignaturaNoEncontradaError, ProgramaNoEncontradoError)
 
 ## Para pedir datos al usuario
 
@@ -148,9 +151,10 @@ def elegir_grupo(grupo_controller):
 def agregar_grupo(grupo_controller, asignatura_controller, persona_controller):
     codigo_asignatura = input("Ingresa el código de la asignatura: ")
     
-    asignatura = asignatura_controller.buscar_asignatura(codigo_asignatura)
-    if asignatura is None:
-        print("No existe una asignatura con ese código")
+    try:
+        asignatura = asignatura_controller.buscar_asignatura(codigo_asignatura)
+    except AsignaturaNoEncontradaError as error:
+        print(f"Error: {error}")
         return
 
     docente = elegir_docente(persona_controller)
@@ -172,8 +176,67 @@ def agregar_grupo(grupo_controller, asignatura_controller, persona_controller):
         except ValueError as error:
             print(f"{error}. Intenta nuevamente.\n")
 
-#def retirar_de_grupo(grupo_controller):
+def elegir_estudiante(persona_controller):
+    estudiantes = [persona for persona in persona_controller.get_personas() if isinstance(persona, Estudiante)]
+    descripciones = [f"{estudiante.get_codigo_estudiantil()} - {estudiante.get_nombre()}" for estudiante in estudiantes]
+    return elegir_con_descripcion(estudiantes, descripciones, "Primero debe registrar un estudiante")
 
+def matricular_en_grupo(grupo_controller, persona_controller):
+    grupo = elegir_grupo(grupo_controller)
+    if grupo is None:
+        return
+
+    estudiante = elegir_estudiante(persona_controller)
+    if estudiante is None:
+        return
+
+    try:
+        grupo.matricular_estudiante(estudiante)
+        print("Estudiante matriculado con éxito")
+    except EstudianteYaMatriculadoError as error:
+        print(f"Error: {error}")
+    except CapacidadMaximaError as error:
+        print(f"Error: {error}")
+
+def retirar_de_grupo(grupo_controller):
+    grupo = elegir_grupo(grupo_controller)
+    if grupo is None:
+        return
+
+    codigo_estudiantil = input("Ingresa el código estudiantil a retirar (ej. EST-001): ")
+    try:
+        grupo.retirar_estudiante(codigo_estudiantil)
+        print("Estudiante retirado con éxito")
+    except EstudianteNoMatriculadoError as error:
+        print(f"Error: {error}")
+
+def mostrar_grupos(grupo_controller):
+    grupos = grupo_controller.get_grupos()
+
+    if not grupos:
+        print("No existen grupos registrados")
+        return
+
+    for grupo in grupos:
+        print(grupo.mostrar_informacion_grupo())
+        print(grupo.mostrar_estudiantes())
+        print()
+
+## Funciones para buscar (lanzan excepción si no encuentran el elemento)
+
+def buscar_asignatura(asignatura_controller):
+    codigo = input("Ingresa el código de la asignatura: ")
+    try:
+        print(asignatura_controller.buscar_asignatura(codigo).mostrar_informacion())
+    except AsignaturaNoEncontradaError as error:
+        print(f"Error: {error}")
+
+def buscar_programa(programa_controller):
+    codigo = input("Ingresa el código del programa: ")
+    try:
+        print(programa_controller.buscar_programa(codigo).mostrar_informacion())
+    except ProgramaNoEncontradoError as error:
+        print(f"Error: {error}")
 
 ## Funciones para mostrar
 
@@ -261,7 +324,7 @@ def modificar_creditos(asignatura_controller):
 
 ## Demostración automática 
 
-def ejecutar_demostracion(programa_controller, asignatura_controller, persona_controller):
+def ejecutar_demostracion(programa_controller, asignatura_controller, persona_controller, grupo_controller):
     if persona_controller.buscar_persona("1001") is not None:
         print("La demostración ya se ejecutó")
         return
