@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 class Horario:
     def __init__(self, dia, hora_inicio, hora_fin, salon):
