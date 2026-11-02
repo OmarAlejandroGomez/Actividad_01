@@ -1,4 +1,7 @@
 from models.horario import Horario
+from models.asignatura import Asignatura
+from models.docente import Docente
+from models.excepciones import EstudianteYaMatriculadoError, CapacidadMaximaError, EstudianteNoMatriculadoError
 
 class GrupoAcademico:
     
@@ -7,11 +10,11 @@ class GrupoAcademico:
             self.codigo = codigo
         else:
             raise ValueError("El código del grupo no puede estar vacío")
-        
+        self._estudiantes = []  # Lista para almacenar los estudiantes inscritos en el grupo académico
         self.set_asignatura(asignatura)
         self.set_docente(docente)
         self.set_capacidad_maxima(capacidad_maxima)
-        self._estudiantes = []  # Lista para almacenar los estudiantes inscritos en el grupo académico
+        
         
         # Crear un objeto Horario para el grupo académico
         self._horario = Horario(dia, hora_inicio, hora_fin, salon)  
@@ -25,7 +28,7 @@ class GrupoAcademico:
         return self._asignatura
     
     def set_asignatura(self, asignatura):
-        if(asignatura.strip() != ""):
+        if isinstance(asignatura, Asignatura):
             self._asignatura = asignatura
         else:
             raise ValueError("Debe indicar una asignatura existente")
@@ -35,7 +38,7 @@ class GrupoAcademico:
         return self._docente
     
     def set_docente(self, docente):
-        if(docente.strip() != ""):
+        if isinstance(docente, Docente):
             self._docente = docente
         else:
             raise ValueError("Debe indicar un docente existente")
@@ -66,7 +69,7 @@ class GrupoAcademico:
     
     def mostrar_informacion_grupo(self):
         return (
-            f"Código del grupo: {self.get_codigo} -"
+            f"Código del grupo: {self.get_codigo()} -"
             f"Asignatura: {self._asignatura.get_nombre()} ({self._asignatura.get_codigo()}) - "
             f"Docente: {self._docente.get_nombre()} - "
             f"Horario: {self._horario.mostrar_informacion()} - "
@@ -78,21 +81,21 @@ class GrupoAcademico:
         
         # verificar si el estudiante ya está matriculado en el grupo
         for matriculado in self._estudiantes:
-            if(matriculado.get_codigo_estudiante() == estudiante.get_codigo_estudiante()):
-                raise ValueError(f"El estudiante {estudiante.get_codigo_estudiante()} ya está matriculado en el grupo.")
+            if(matriculado.get_codigo_estudiantil() == estudiante.get_codigo_estudiantil()):
+                raise EstudianteYaMatriculadoError(estudiante.get_codigo_estudiantil(), self.get_codigo())
         
         # agregar al estudiante al grupo si hay cupos disponibles          
         if len(self._estudiantes) < self._capacidad_maxima:
             self._estudiantes.append(estudiante)
         else:
-            raise ValueError("No se puede matricular al estudiante. El grupo alcanzó su capacidad máxima.")
+            raise CapacidadMaximaError(self.get_codigo(), self._capacidad_maxima)
  
     def retirar_estudiante(self, codigo_estudiantil):
         for matriculado in self._estudiantes:
             if(matriculado.get_codigo_estudiantil() == codigo_estudiantil.strip()):
                 self._estudiantes.remove(matriculado)
                 return
-        raise ValueError(f"El estudiante {codigo_estudiantil.strip()} no está matriculado en el grupo.")
+            raise EstudianteNoMatriculadoError(codigo_estudiantil.strip(), self.get_codigo())
     
     def mostrar_estudiantes(self):
         listado_estudiantes = []
