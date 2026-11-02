@@ -315,11 +315,85 @@ def ejecutar_demostracion(programa_controller, asignatura_controller, persona_co
     mostrar_personas(persona_controller)
 
 
+
+
+
+    # ---------------- Pruebas Actividad Colaborativa N° 2 ----------------
+
+    print("\n6) Intento de crear directamente una Persona (clase abstracta)")
+    try:
+        Persona("9999", "Sin Tipo", "sintipo@correo.com")
+    except TypeError as error:
+        print(f"Rechazado: no se puede crear una Persona directamente ({error})")
+
+    print("\n7) Creación de estudiantes adicionales")
+    persona_controller.add_estudiante("1003", "Camila Torres", "camila@correo.com", sistemas, 2, 4.5)
+    persona_controller.add_estudiante("1004", "Diego Ríos", "diego@correo.com", sistemas, 4, 3.5)
+    ana = persona_controller.buscar_persona("1001")
+    luis = persona_controller.buscar_persona("1002")
+    camila = persona_controller.buscar_persona("1003")
+    diego = persona_controller.buscar_persona("1004")
+    marta = persona_controller.buscar_persona("2001")
+    jorge = persona_controller.buscar_persona("2002")
+    derecho_civil = asignatura_controller.buscar_asignatura("DC01")
+    print("Se crearon 2 estudiantes adicionales")
+
+    print("\n8) Creación de dos grupos académicos (cada grupo crea su horario)")
+    grupo1 = grupo_controller.add_grupo("G01", programacion, marta, 2, "Lunes", "08:00", "10:00", "Salón 201")
+    grupo2 = grupo_controller.add_grupo("G02", derecho_civil, jorge, 30, "Miércoles", "14:00", "16:00", "Salón 305")
+    print(grupo1.mostrar_informacion_grupo())
+    print(grupo2.mostrar_informacion_grupo())
+
+    print("\n9) Matrícula correcta de estudiantes")
+    grupo1.matricular_estudiante(ana)
+    grupo1.matricular_estudiante(camila)
+    grupo2.matricular_estudiante(luis)
+    print(grupo1.mostrar_estudiantes())
+
+    print("\n10) Intento de matricular un estudiante duplicado")
+    try:
+        grupo2.matricular_estudiante(luis)
+    except EstudianteYaMatriculadoError as error:
+        print(f"Error controlado: {error}")
+
+    print("\n11) Intento de superar la capacidad del grupo")
+    try:
+        grupo1.matricular_estudiante(diego)
+    except CapacidadMaximaError as error:
+        print(f"Error controlado: {error}")
+
+    print("\n12) Retiro correcto de un estudiante")
+    grupo1.retirar_estudiante(camila.get_codigo_estudiantil())
+    print(f"Se retiró a {camila.get_nombre()}. Estudiantes del grupo {grupo1.get_codigo()}:")
+    print(grupo1.mostrar_estudiantes())
+
+    print("\n13) Intento de retirar un estudiante que no está matriculado")
+    try:
+        grupo1.retirar_estudiante("EST-999")
+    except EstudianteNoMatriculadoError as error:
+        print(f"Error controlado: {error}")
+
+    print("\n14) Búsqueda de una asignatura inexistente")
+    try:
+        asignatura_controller.buscar_asignatura("XXX1")
+    except AsignaturaNoEncontradaError as error:
+        print(f"Error controlado: {error}")
+
+    print("\n15) Búsqueda de un programa inexistente")
+    try:
+        programa_controller.buscar_programa("MED")
+    except ProgramaNoEncontradoError as error:
+        print(f"Error controlado: {error}")
+
+    print("\n16) El programa continúa su ejecución después de controlar cada excepción")
+    mostrar_grupos(grupo_controller)
+
 ## main es la función principal, contiene el menú y las acciones correspondientes a cada opción
 def main():
     programa_controller = ProgramaController()
     asignatura_controller = AsignaturaController()
     persona_controller = PersonaController()
+    grupo_controller = GrupoController()
 
     while True:
         print("\n Opciones")
@@ -334,8 +408,14 @@ def main():
         print("9. Modificar correo de una persona")
         print("10. Modificar semestres de un programa")
         print("11. Modificar créditos de una asignatura")
-        print("12. Ejecutar demostración")
-        print("13. Salir\n")
+        print("12. Agregar grupo académico")
+        print("13. Matricular estudiante en un grupo")
+        print("14. Retirar estudiante de un grupo")
+        print("15. Mostrar grupos y estudiantes")
+        print("16. Buscar asignatura por código")
+        print("17. Buscar programa por código")
+        print("18. Ejecutar demostración")
+        print("19. Salir\n")
 
         option = input("Selecciona una opción: ")
 
@@ -374,13 +454,31 @@ def main():
                 modificar_creditos(asignatura_controller)
 
             case "12":
-                ejecutar_demostracion(programa_controller, asignatura_controller, persona_controller)
+                agregar_grupo(grupo_controller, asignatura_controller, persona_controller)
 
             case "13":
+                matricular_en_grupo(grupo_controller, persona_controller)
+
+            case "14":
+                retirar_de_grupo(grupo_controller)
+
+            case "15":
+                mostrar_grupos(grupo_controller)
+
+            case "16":
+                buscar_asignatura(asignatura_controller)
+
+            case "17":
+                buscar_programa(programa_controller)
+
+            case "18":
+                ejecutar_demostracion(programa_controller, asignatura_controller, persona_controller, grupo_controller)
+
+            case "19":
                 print("Vuelve pronto")
                 break
 
-            case _:
+            case "20":
                 print("Opción inválida")
 
 

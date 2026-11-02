@@ -95,7 +95,7 @@ class GrupoAcademico:
             if(matriculado.get_codigo_estudiantil() == codigo_estudiantil.strip()):
                 self._estudiantes.remove(matriculado)
                 return
-            raise EstudianteNoMatriculadoError(codigo_estudiantil.strip(), self.get_codigo())
+        raise EstudianteNoMatriculadoError(codigo_estudiantil.strip(), self.get_codigo())
     
     def mostrar_estudiantes(self):
         listado_estudiantes = []
